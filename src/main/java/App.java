@@ -1,9 +1,6 @@
 import thread.WeatherParser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,19 +13,19 @@ public class App {
                 "Lugansk, Ukraine", "Zaporozhye, Ukraine"));
 
         ExecutorService executorService = Executors.newFixedThreadPool(5);
-        List<Future<HashMap<String, String>>> listWeather = new ArrayList<Future<HashMap<String, String>>>();
+        List<Future<Map<String, String>>> listWeather = new ArrayList<Future<Map<String, String>>>();
 
 
         //MANY THREADS
         long start = System.currentTimeMillis();
         for (String city : cities) {
             Callable callable = new WeatherParser(city);
-            Future<HashMap<String, String>> future = executorService.submit(callable);
+            Future<Map<String, String>> future = executorService.submit(callable);
             listWeather.add(future);
         }
         executorService.shutdown();
 
-        for (Future<HashMap<String, String>> weather : listWeather) {
+        for (Future<Map<String, String>> weather : listWeather) {
             System.out.println(weather.get());
         }
         long end = System.currentTimeMillis();

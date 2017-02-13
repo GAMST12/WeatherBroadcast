@@ -7,21 +7,22 @@ import org.jdom.input.SAXBuilder;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class WeatherParser implements Callable<HashMap<String, String>>{
-    private String url;
-    private HashMap<String, String> singleWeather = new HashMap<String, String>();
+public class WeatherParser implements Callable<Map<String, String>>{
+    private String city;
+    private Map<String, String> singleWeather = new HashMap<String, String>();
 
-    public WeatherParser(String url) {
-        this.url = url;
+    public WeatherParser(String city) {
+        this.city = city;
     }
 
     @Override
-    public HashMap<String, String> call() throws Exception {
+    public Map<String, String> call() throws Exception {
         SAXBuilder parser = new SAXBuilder();
-        Document xmlDoc = parser.build(new URL("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=14420df3272249d28dc155154170702&q="+url +"&num_of_days=1&tp=3&format=xml"));
-        singleWeather.put("Город", url);
+        Document xmlDoc = parser.build(new URL("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=14420df3272249d28dc155154170702&q="+city +"&num_of_days=1&tp=3&format=xml"));
+        singleWeather.put("Город", city);
         Element rootNode = xmlDoc.getRootElement();
         List<Element> weatherList = rootNode.getChildren("weather");
         for (Element nextWeather : weatherList) {
